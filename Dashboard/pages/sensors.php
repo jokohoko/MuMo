@@ -110,6 +110,7 @@
                             }
                         }
                     }
+                    return $base;
                 }
 
                 /* Print functions */
