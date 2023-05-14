@@ -26,15 +26,20 @@ if(isset($data["end_device_ids"])){
 	$name = $ID_offsets[2];
 
 	$json = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	$data_set = false;
 
-	if(isset($payload["battery"])){         $json[0] = round($payload["battery"], 0) 		+ $offsets[0];     }
-	if(isset($payload["temperature"])){     $json[1] = round($payload["temperature"], 2) 	+ $offsets[1];     }
-	if(isset($payload["humidity"])){        $json[2] = round($payload["humidity"], 2) 		+ $offsets[2];     }
-	if(isset($payload["illumination"])){    $json[3] = round($payload["illumination"], 0) 	+ $offsets[3];     }
-	if(isset($payload["pressure"])){        $json[4] = round($payload["pressure"], 2) 		+ $offsets[4];     }
-	if(isset($payload["voc"])){             $json[5] = round($payload["voc"], 0) 			+ $offsets[5];     }
-	if(isset($payload["dust"])){            $json[6] = round($payload["dust"], 3) 			+ $offsets[6];     }
+	if(isset($payload["battery"])){         $json[0] = round($payload["battery"], 0) 		+ $offsets[0];  $data_set = true;     }
+	if(isset($payload["temperature"])){     $json[1] = round($payload["temperature"], 2) 	+ $offsets[1];  $data_set = true;     }
+	if(isset($payload["humidity"])){        $json[2] = round($payload["humidity"], 2) 		+ $offsets[2];  $data_set = true;     }
+	if(isset($payload["illumination"])){    $json[3] = round($payload["illumination"], 0) 	+ $offsets[3];  $data_set = true;     }
+	if(isset($payload["pressure"])){        $json[4] = round($payload["pressure"], 2) 		+ $offsets[4];  $data_set = true;     }
+	if(isset($payload["voc"])){             $json[5] = round($payload["voc"], 0) 			+ $offsets[5];  $data_set = true;     }
+	if(isset($payload["dust"])){            $json[6] = round($payload["dust"], 3) 			+ $offsets[6];  $data_set = true;     }
 	
+	if(!$data_set){ 
+		exit(); // ### no data is found in the set, so skipp? Probably an empty package or wrong call...
+	}
+
 	$frame_counter = isset_or_null($data, "counter");
 	$json_encoded = json_encode($json);
 	if(isset($data["uplink_message"]["rx_metadata"])){
@@ -61,15 +66,20 @@ if(isset($data["end_device_ids"])){
 	$name = $ID_offsets[2];
 
 	$json = array(NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	$data_set = false;
 
-	if(isset($payload["battery"])){         $json[0] = round($payload["battery"], 0) 		+ $offsets[0];     }
-	if(isset($payload["temperature"])){     $json[1] = round($payload["temperature"], 2) 	+ $offsets[1];     }
-	if(isset($payload["humidity"])){        $json[2] = round($payload["humidity"], 2) 		+ $offsets[2];     }
-	if(isset($payload["illumination"])){    $json[3] = round($payload["illumination"], 0) 	+ $offsets[3];     }
-	if(isset($payload["pressure"])){        $json[4] = round($payload["pressure"], 2) 		+ $offsets[4];     }
-	if(isset($payload["voc"])){             $json[5] = round($payload["voc"], 0) 			+ $offsets[5];     }
-	if(isset($payload["dust"])){            $json[6] = round($payload["dust"], 3) 			+ $offsets[6];     }
+	if(isset($payload["battery"])){         $json[0] = round($payload["battery"], 0) 		+ $offsets[0];  $data_set = true;     }
+	if(isset($payload["temperature"])){     $json[1] = round($payload["temperature"], 2) 	+ $offsets[1];  $data_set = true;     }
+	if(isset($payload["humidity"])){        $json[2] = round($payload["humidity"], 2) 		+ $offsets[2];  $data_set = true;     }
+	if(isset($payload["illumination"])){    $json[3] = round($payload["illumination"], 0) 	+ $offsets[3];  $data_set = true;     }
+	if(isset($payload["pressure"])){        $json[4] = round($payload["pressure"], 2) 		+ $offsets[4];  $data_set = true;     }
+	if(isset($payload["voc"])){             $json[5] = round($payload["voc"], 0) 			+ $offsets[5];  $data_set = true;     }
+	if(isset($payload["dust"])){            $json[6] = round($payload["dust"], 3) 			+ $offsets[6];  $data_set = true;     }
 	
+	if(!$data_set){ 
+		exit(); // ### no data is found in the set, so skipp? Probably an empty package or wrong call...
+	}
+
 	$frame_counter = isset_or_null($data, "counter");
 	$json_encoded = json_encode($json);
 

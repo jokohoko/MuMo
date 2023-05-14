@@ -54,7 +54,7 @@
                     <?php echo icon_geo(); ?>
                 </a>
             <?php }else{ ?>
-                <a class="btn btn-outline-primary btn-lg" href="<?php echo (isset($_SESSION["user_privileges"]) && $_SESSION["user_privileges"] > 0)?"?settings=sensor&id=".$_GET["sensor"]:"#"; ?>"
+                <a class="btn btn-outline-primary btn-lg" href="<?php echo (isset($_SESSION["user_privileges"]) && $_SESSION["user_privileges"] > 1)?"?settings=sensor&id=".$_GET["sensor"]:"#"; ?>"
                     role="button" data-toggle="tooltip" data-placement="left" title="Open this sensors settings">
                     <?php echo icon_gear(); ?>
                 </a>
@@ -236,6 +236,7 @@
                             highlightCircleSize: 7.5,
                             colors: ["<?php echo $measure["color"]; ?>"],
                             fillAlpha: 0.25,
+                            connectSeparatedPoints: true, //### Added this line to close up gaps in the measurements with version V2 of the nodes ###
                             animatedZooms: true<?php if(isset($visualization[$measure_ID])){ ?>,
                             includeZero: true <?php } ?>
                         }
@@ -253,6 +254,7 @@
                 strokeWidth: '3',
                 highlightCircleSize: 7.5,
                 colors: ["rgba(52, 73, 94,0.75)"],
+                connectSeparatedPoints: true, //### Added this line to close up gaps in the measurements with version V2 of the nodes ###
                 animatedZooms: true,
                 includeZero: true,
                 valueRange: [null, 75]
@@ -396,7 +398,8 @@ function print_csv($list, $variable_name, $visible_name, $json_id){
         }else{//not a new day, so just add to the buffer
             //parse new data and add to buffer
             if($row["frame"] > $last_frame+5){ //first check if we missed a bunch of frames
-                $rolling_data["data"][] = array("timestamp"=>$row["timestamp"], "measurement"=>null);
+                // ### Framecounter is not active in TTN2, this should be changed to a time-offset analysis ###
+                $rolling_data["data"][] = array("timestamp"=>$row["timestamp"], "measurement"=>NaN); // ### For dygraphs, with connectseparatedpoints turned on for sensor V2, we must use NaN instead of Null to show a gap in the dataline
             }
             //then add the nex data to the rolling data
             $rolling_data["min"] = min($rolling_data["min"], $row[$json_id]);

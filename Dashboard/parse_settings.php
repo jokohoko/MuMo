@@ -32,9 +32,9 @@ if(isset($_GET["logout"])){
     $name = $_POST["user_name"];
     $email = $_POST["email"];
     if(isset($_POST["edit"]) && $_POST["edit"] == "true"){
-        $edit = 2;
+        $edit = 2; // Edit rights
     }else{
-        $edit = 1;
+        $edit = 1; //only view rights
     }
     mysqli_query($con, "INSERT INTO users (user_name, email, privileges) VALUES ('".$name."','".$email."',".$edit.")") or die ('Unable to execute query. '. mysqli_error($con));
     $id = mysqli_insert_id($con);

@@ -7,7 +7,7 @@
                         <?php echo icon_home(); ?>
                     </a><span class="ml-2">Dashboard home</span>
                 <?php }else{ ?>
-                    <a class="btn btn-outline-primary btn-lg" href="<?php echo (isset($_SESSION["user_privileges"]) && $_SESSION["user_privileges"] > 0)?"?settings=general":"#"; ?>" role="button" data-toggle="tooltip" data-placement="left" title="Open settings">
+                    <a class="btn btn-outline-primary btn-lg" href="<?php echo (isset($_SESSION["user_privileges"]) && $_SESSION["user_privileges"] > 1)?"?settings=general":"#"; ?>" role="button" data-toggle="tooltip" data-placement="left" title="Open settings">
                         <?php echo icon_gear(); ?>
                     </a><span class="ml-2">Dashboard home</span>
                 <?php } ?>

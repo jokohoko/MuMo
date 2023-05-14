@@ -37,6 +37,7 @@ Please also look at our other pages for details on the custom end-nodes and acti
     - Color: Color to use in the charts
     - Calibration: Limiting range in the calibration settings
     - Range: probible range the values will fall within (limits the alert ranges)
+    - From_zero: Show this variable in a chart with 0 in view or zoom in to the data variance
 
 
 ## Database setup

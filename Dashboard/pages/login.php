@@ -1,7 +1,7 @@
 <div class="container h-100 d-flex" style="width: 500px;">
 		<div class="jumbotron my-auto text-center w-100">
 		<h1 class="display-3">
-			<img alt="Brand" src="assets\images\logo\mumoLogo.png" width="400px">
+			<img alt="Brand" src="<?php echo $logo; ?>" width="400px">
 		</h1>
 		<?php 
 		if(isset($_GET["error"])){

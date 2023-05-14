@@ -28,6 +28,8 @@
 </head>
 <body>
 <h1>Mumo sensor device levensduur voorspelling</h1>
+<h3 class="my-5">Batterycapaciteit: <span id="batterij_out"></span></h3>
+<input type="range" min="2000" max="10000" value="5000" step="100" class="slider" id="batterij" style="width: 100%">
 <h3 class="my-5">Metingen per minuut: <span id="metingen_out"></span></h3>
 <input type="range" min="1" max="60" value="1" step="1" class="slider" id="metingen" style="width: 100%">
 
@@ -61,22 +63,23 @@
         bepaal_levensduur();
     });
     function bepaal_levensduur(){
+        var batterij = $("#batterij").val();
         var metingen = $("#metingen").val();
         var zendingen = $("#zendingen").val();
         console.log(metingen, zendingen);
         $("#metingen_out").text(metingen);
         $("#zendingen_out").text(zendingen);
+        $("#batterij_out").text(batterij);
         verbruik_metingen = 0.001042 * metingen;
         verbruik_slaapstand = 0.0018888;
         verbruik_zendingen = 0.000049 * (24*60/zendingen);
 
         verbruik_som = verbruik_metingen + verbruik_slaapstand + verbruik_zendingen;
-        resultaat = 4.5/verbruik_som;
+        resultaat = (batterij/1000)/verbruik_som;
         $("#resultaat").text((resultaat).toFixed(2));
         console.log(verbruik_metingen, verbruik_slaapstand, verbruik_zendingen, verbruik_som, resultaat);
         $("#bar_slaapstand").width(verbruik_slaapstand/verbruik_som * 100+"%");
         $("#bar_metingen").width(verbruik_metingen/verbruik_som * 100+"%");
         $("#bar_zendingen").width(verbruik_zendingen/verbruik_som * 100+"%");
-        
     }
 </script>

@@ -8,7 +8,7 @@
             <?php 
                 //make lists of sensors and list of groups to show on the home page
                 if(isset($id)){ // for one specific sensor
-                    $query = "SELECT * FROM sensoren WHERE device_ID=".$id;
+                    $query = "SELECT * FROM sensoren WHERE device_ID='".$id."' OR device_EUI='".$id."'";
                 }else{ // for all sensors
                     $query = "SELECT * FROM sensoren";
                 }
@@ -74,11 +74,42 @@
                 }
 
                 function get_sensor_data($id){
+                    // ### At the moment this prints the last received data, even if this is an empty or partial package
                     global $con;
-                    $query = "SELECT * FROM data WHERE device_ID='".$id."' ORDER by data_ID DESC limit 0,1";
+                    $query = "SELECT * FROM data WHERE device_ID='".$id."' AND timestamp >= now()-INTERVAL 1 DAY ORDER by data_ID DESC"; // ### get more than just 1 dataline
                     $result = mysqli_query($con, $query);
-                    //print_r(mysqli_fetch_assoc($result));
-                    return mysqli_fetch_assoc($result);
+                    if(!mysqli_num_rows($result)){
+                        // ### If no recent data is found, just return the last data ever and empyt json dataset
+                        $query = "SELECT * FROM data WHERE device_ID='".$id."' ORDER by data_ID DESC limit 0,1"; // ### get more than just 1 dataline
+                        $result = mysqli_query($con, $query);
+                        $results = mysqli_fetch_assoc($result);
+                        $results["json"] = null;
+                        return $results;
+                    }
+                    $results = mysqli_fetch_assoc($result); // ### the first result we keep (this is the most recent and has the best metadata). only the json we combine
+
+                    // ### parse the json, find overlap untill every item is filled or we run out of data, and return.
+                    $json = json_decode($results["json"]);
+                    while($row = mysqli_fetch_assoc($result)){
+                        //echo "nog";
+                        $json_ = json_decode($row["json"]);
+                        $json = fill_empty_array_spots($json, $json_);
+                    }
+                    $results["json"] = json_encode($json); // ### paste the combined results back in the dataset
+                    //### if nothing, then its fine to just return that. 
+                    return $results;
+                }
+
+                function fill_empty_array_spots($base, $fillings){
+                    // ### custom function that fills empty spots if the data is available in any other filling dataset
+                    foreach($base as $i => $value){
+                        if($value == null){
+                            if($fillings[$i] !== null){
+                                $base[$i] = $fillings[$i];
+                                return $base;
+                            }
+                        }
+                    }
                 }
 
                 /* Print functions */
@@ -188,7 +219,7 @@
                             if(strtotime($data["timestamp"]) < strtotime("-".$thresholds[0]["json"][0]." minutes")){ echo ' bg-danger text-white rounded'; }
                             echo '">'.time_elapsed_string($data["timestamp"], "<br/>").'</div>';
                         }else{
-                            echo '<div class="col-2 text-center">Never seen</div>';
+                            echo '<div class="col-2 text-center">No recent data</div>';
                         }
                         ?>
                         <div class="col-1 text-center">

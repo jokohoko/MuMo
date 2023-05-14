@@ -7,7 +7,7 @@
 } ?>
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- GIT version -->
 <head>
     <meta charset="utf-8" />
 	<?php if(isset($_SESSION["user"])){ ?>
